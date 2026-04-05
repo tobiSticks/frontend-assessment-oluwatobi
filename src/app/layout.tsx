@@ -15,7 +15,7 @@ const YearFilter = dynamic(() => import("@/features/movies/components/YearFilter
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "CineSearch | Movie Explorer",
+  title: "CheckIt | Movie Explorer",
   description: "A production-grade movie explorer built with Next.js",
 };
 
