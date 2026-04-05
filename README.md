@@ -2,7 +2,7 @@
 
 A production-grade movie explorer application built with **Next.js 16 (React 19)** and **TypeScript**, leveraging the TMDB API to provide a seamless browsing experience.
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -36,7 +36,7 @@ A production-grade movie explorer application built with **Next.js 16 (React 19)
 
 ---
 
-## 🏗️ Architecture Decisions
+##  Architecture Decisions
 
 ### Feature-Based Folder Structure
 The project follows a **Feature-Based** architecture (found in `src/features/`). This structure was chosen over a flat `components/` or `hooks/` folder for several reasons:
@@ -47,7 +47,7 @@ The project follows a **Feature-Based** architecture (found in `src/features/`).
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Framework**: Next.js 15/16 (App Router)
 - **Language**: TypeScript
