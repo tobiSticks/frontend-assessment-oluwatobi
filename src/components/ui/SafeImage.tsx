@@ -14,6 +14,7 @@ export default function SafeImage({
   ...props
 }: SafeImageProps) {
   const [failed, setFailed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const srcStr = typeof src === "string" ? src : "";
   const hasSrc = Boolean(srcStr);
 
@@ -34,17 +35,31 @@ export default function SafeImage({
   return (
     <div
       className={cn(
-        "bg-slate-200",
-        fill ? "absolute inset-0 size-full" : "relative size-full",
+        "relative overflow-hidden bg-slate-200",
+        fill ? "absolute inset-0 size-full" : "size-full",
+        className,
       )}
     >
+      {isLoading && (
+        <div className="absolute inset-0 z-10 animate-pulse bg-slate-200">
+          <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        </div>
+      )}
       <Image
         {...props}
         fill={fill}
         src={srcStr}
         alt={alt}
-        onError={() => setFailed(true)}
-        className={cn(fill && "object-cover", className)}
+        onLoad={() => setIsLoading(false)}
+        onError={() => {
+          setFailed(true);
+          setIsLoading(false);
+        }}
+        className={cn(
+          "transition-opacity duration-300",
+          isLoading ? "opacity-0" : "opacity-100",
+          fill && "object-cover",
+        )}
       />
     </div>
   );
