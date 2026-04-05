@@ -77,11 +77,10 @@ We chose **Pagination** over Infinite Scroll for two primary reasons:
 - **SEO & Indexing**: Each page has a unique URL, making it crawlable by search engines and easier for users to bookmark specific results.
 - **Shareability & Predictability**: Users can share a link to "Page 3" of results and see exactly what they expect. Infinite scroll often loses state when navigating back, leading to a frustrating user experience.
 
-### Manual Filtering (The Genre Challenge)
-A notable limitation of the TMDB API is that its `/search/movie` endpoint does not natively support genre filtering. 
-- **Implementation**: When both a search `query` and a `genre` are provided, we fetch the search results and apply the genre filter on the **Server Component**. 
-- **Consequence**: This applies the filter to the current page of search results. While this differs from a native DB-level filter, it ensures a fast, zero-JS-cost experience for the user.
-- **Optimization**: For **Year-based** filtering, we utilized the native `primary_release_year` parameter supported by both search and discover endpoints for maximum precision.
+### Year-Based Filtering
+Unlike genre filtering, which often requires manual processing, TMDB natively supports filtering by release year via the `primary_release_year` parameter.
+- **Precision**: By using the native API parameter, we ensure that the entire movie database is filtered correctly (not just the current page of results).
+- **Synergy**: This native support allows the Year Filter to work seamlessly in combination with the search query for highly refined results.
 
 ---
 
