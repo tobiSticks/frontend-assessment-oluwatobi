@@ -1,45 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CineSearch | Movie Explorer
 
-## Getting Started
+A production-grade movie explorer application built with **Next.js 16 (React 19)** and **TypeScript**, leveraging the TMDB API to provide a seamless browsing experience.
 
-First, run the development server:
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- A TMDB API Key (Get one [here](https://www.themoviedb.org/documentation/api))
+
+### Local Setup
+
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-url>
+   cd checkit
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**:
+   Create a `.env.local` file in the root directory:
+   ```env
+   TMDB_API_KEY=your_api_key_here
+   ```
+
+4. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+---
+
+## 🏗️ Architecture Decisions
+
+### Feature-Based Folder Structure
+The project follows a **Feature-Based** architecture (found in `src/features/`). This structure was chosen over a flat `components/` or `hooks/` folder for several reasons:
+
+- **Scalability**: As the app grows, grouping logic by domain (e.g., `movies`, `search`) becomes much easier to maintain than grouping by technical type.
+- **Encapsulation**: Components, hooks, and types related to the movie grid are co-located, making it easier to understand dependencies at a glance.
+- **Reduced Cognitive Load**: Developers can focus on a single feature area without navigating through unrelated files in global folders.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15/16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **API**: TMDB (The Movie Database)
+- **Testing**: Vitest & React Testing Library
+
+---
+
+## Performance Optimizations
+
+1. **`next/image` Priority Loading**: 
+   Images in the Initial viewport (top 8 results) are loaded with the `priority` attribute. This optimizes the **Largest Contentful Paint (LCP)** by skipping the standard lazy-loading queue for above-the-fold content.
+   
+2. **ISR Caching & Data Fetching**:
+   We utilize Next.js's data fetching with `revalidate: 3600`. This ensures that movie lists are cached for an hour, significantly reducing load times for subsequent visitors while maintaining fresh data.
+
+3. **URL-Driven State**:
+   All search queries, years, and pagination states are stored directly in the URL parameters. This allows for **Zero-effort Shareability** and ensures that the browser back/forward buttons work as expected without manual state management.
+
+---
+
+##  Trade-offs & Technical Challenges
+
+### Pagination vs. Infinite Scroll
+We chose **Pagination** over Infinite Scroll for two primary reasons:
+- **SEO & Indexing**: Each page has a unique URL, making it crawlable by search engines and easier for users to bookmark specific results.
+- **Shareability & Predictability**: Users can share a link to "Page 3" of results and see exactly what they expect. Infinite scroll often loses state when navigating back, leading to a frustrating user experience.
+
+### Manual Filtering (The Genre Challenge)
+A notable limitation of the TMDB API is that its `/search/movie` endpoint does not natively support genre filtering. 
+- **Implementation**: When both a search `query` and a `genre` are provided, we fetch the search results and apply the genre filter on the **Server Component**. 
+- **Consequence**: This applies the filter to the current page of search results. While this differs from a native DB-level filter, it ensures a fast, zero-JS-cost experience for the user.
+- **Optimization**: For **Year-based** filtering, we utilized the native `primary_release_year` parameter supported by both search and discover endpoints for maximum precision.
+
+---
+
+## Testing
+
+The project includes a suite of unit tests for core interactive components:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-
-
-# frontend-assessment-oluwatobi
-
-Why I chose TMDB: It is professional, has excellent image support (crucial for LCP/CLS testing), and offers clear categories for filtering
-
-
-step 1: deployed so i could have an application url for TMDB
+- **SearchInput**: Verifies URL persistence and input handling.
+- **SafeImage**: Validates fallback UIs and loading states.
